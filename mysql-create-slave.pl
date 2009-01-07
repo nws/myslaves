@@ -19,6 +19,7 @@ use constant {
 	MYSQL_USER => 'mysql',
 	MYSQL_BASE_PORT => 3306,
 	MYSQL_INSTALL_DB => '/usr/bin/mysql_install_db',
+	MYSQL_DEFAULT_SLAVE_SERVER_ID => 2,
 
 	CONF_DIR => '/etc/mysql-slaves/',
 	DATA_DIR => '/var/lib/mysql-slaves/',
@@ -100,6 +101,7 @@ sub write_config {
 sub create_config {
 	my ($label, $port) = @_;
 
+	my $server_id = MYSQL_DEFAULT_SLAVE_SERVER_ID;
 	my $user = MYSQL_USER;
 
 	my $conf = <<EOS;
@@ -110,6 +112,7 @@ socket		= @{[RUN_DIR]}mysqld.sock.$label
 socket		= @{[RUN_DIR]}mysqld.sock.$label
 nice		= 0
 [mysqld]
+server-id	= $server_id
 user		= $user
 pid-file	= @{[RUN_DIR]}mysqld.pid.$label
 socket		= @{[RUN_DIR]}mysqld.sock.$label
