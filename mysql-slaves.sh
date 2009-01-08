@@ -6,6 +6,7 @@
 # /etc/init.d/mysql-slaves start [ $label ]
 
 mysqld=/usr/bin/mysqld_safe
+mysqlclient=/usr/bin/mysql
 mysqladmin=/usr/bin/mysqladmin
 slave_cnf_dir=/etc/mysql-slaves/
 slave_run_dir=/var/run/mysql-slaves/
@@ -38,7 +39,7 @@ status_mysql() {
 
 	if test -f "$pidfile" -a -S "$sockfile"; then
 		echo "mysql-slave $1 status"
-		$mysqladmin --defaults-file="$slave_cnf_dir$1.cnf" status
+		$mysqlclient --defaults-file="$slave_cnf_dir$1.cnf" -e 'show slave status\G'|grep -E 'Running|IO_State|Seconds_Behind'
 	else
 		echo "mysql-slave $1 not running"
 	fi
