@@ -1,0 +1,14 @@
+#!/bin/bash
+
+slave_cnf_dir=/etc/mysql-slaves/
+
+if test "$#" = 0
+then
+	echo "no config passed, wtf" >&2
+	find $slave_cnf_dir -type f -name '*.cnf' -printf "%f\n" | sed 's/\.cnf$//' >&2
+	exit 1
+fi
+
+cnf="$1"
+shift
+exec mysqldump --defaults-file="$slave_cnf_dir$cnf".cnf "$@"
