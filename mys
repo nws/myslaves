@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if test "$#" = 0
+then
+	echo "no config passed, wtf" >&2
+	exit 1
+fi
+
+cnf="$1"
+shift
+exec mysql --defaults-file=/etc/mysql-slaves/"$cnf".cnf "$@"
